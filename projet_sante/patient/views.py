@@ -19,42 +19,42 @@ class PatientRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 # Liste tous les patients
 @api_view(['GET'])
 def liste_patients(request):
-    patients = Patient.objects.all()
-    serializer = PatientSerializer(patients, many=True)
-    return Response(serializer.data)
+    patients_liste = Patient.objects.all()
+    serializer_liste = PatientSerializer(patients_liste, many=True)
+    return Response(serializer_liste.data)
 #________________________________________________________________________________________________Ajouter
 # Ajouter un patient
 @api_view(['POST'])
 def ajouter_patient(request):
-    serializer = PatientSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer_ajout = PatientSerializer(data=request.data)
+    if serializer_ajout.is_valid():
+        serializer_ajout.save()
+        return Response(serializer_ajout.data, status=status.HTTP_201_CREATED)
+    return Response(serializer_ajout.errors, status=status.HTTP_400_BAD_REQUEST)
 #________________________________________________________________________________________________Modifier
 # Modifier un patient
 @api_view(['PUT', 'PATCH'])
 def modifier_patient(request, pk):
     try:
-        patient = Patient.objects.get(pk=pk)
+        patient_update = Patient.objects.get(pk=pk)
     except Patient.DoesNotExist:
         return Response({'error': 'Patient non trouvé'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = PatientSerializer(patient, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer_update = PatientSerializer(patient_update, data=request.data, partial=True)
+    if serializer_update.is_valid():
+        serializer_update.save()
+        return Response(serializer_update.data)
+    return Response(serializer_update.errors, status=status.HTTP_400_BAD_REQUEST)
 #________________________________________________________________________________________________Supprimer
 # Supprimer un patient
 @api_view(['DELETE'])
 def supprimer_patient(request, pk):
     try:
-        patient = Patient.objects.get(pk=pk)
+        patient_delete = Patient.objects.get(pk=pk)
     except Patient.DoesNotExist:
         return Response({'error': 'Patient non trouvé'}, status=status.HTTP_404_NOT_FOUND)
 
-    patient.delete()
+    patient_delete.delete()
     return Response({'message': 'Patient supprimé avec succès'}, status=status.HTTP_204_NO_CONTENT)
 
 
