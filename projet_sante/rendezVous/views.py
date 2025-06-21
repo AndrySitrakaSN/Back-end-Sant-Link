@@ -18,40 +18,40 @@ class RendezVousRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 #________________________________________________________________________________________________Liste
 @api_view(['GET'])
 def liste_rendezvous(request):
-    rdvs = RendezVous.objects.all()
-    serializer = RendezVousSerializer(rdvs, many=True)
-    return Response(serializer.data)
+    rdvs_liste = RendezVous.objects.all()
+    serializer_liste = RendezVousSerializer(rdvs_liste, many=True)
+    return Response(serializer_liste.data)
 
 #________________________________________________________________________________________________Ajouter
 @api_view(['POST'])
 def ajouter_rendezvous(request):
-    serializer = RendezVousSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer_ajout = RendezVousSerializer(data=request.data)
+    if serializer_ajout.is_valid():
+        serializer_ajout.save()
+        return Response(serializer_ajout.data, status=status.HTTP_201_CREATED)
+    return Response(serializer_ajout.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #________________________________________________________________________________________________Modifier
 @api_view(['PUT', 'PATCH'])
 def modifier_rendezvous(request, pk):
     try:
-        rdv = RendezVous.objects.get(pk=pk)
+        rdv_update = RendezVous.objects.get(pk=pk)
     except RendezVous.DoesNotExist:
         return Response({'error': 'Rendez-vous non trouvé'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = RendezVousSerializer(rdv, data=request.data, partial=True)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer_update = RendezVousSerializer(rdv_update, data=request.data, partial=True)
+    if serializer_update.is_valid():
+        serializer_update.save()
+        return Response(serializer_update.data)
+    return Response(serializer_update.errors, status=status.HTTP_400_BAD_REQUEST)
 
 #________________________________________________________________________________________________Supprimer
 @api_view(['DELETE'])
 def supprimer_rendezvous(request, pk):
     try:
-        rdv = RendezVous.objects.get(pk=pk)
+        rdv_delete = RendezVous.objects.get(pk=pk)
     except RendezVous.DoesNotExist:
         return Response({'error': 'Rendez-vous non trouvé'}, status=status.HTTP_404_NOT_FOUND)
 
-    rdv.delete()
+    rdv_delete.delete()
     return Response({'message': 'Rendez-vous supprimé avec succès'}, status=status.HTTP_204_NO_CONTENT)
